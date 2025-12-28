@@ -20,4 +20,23 @@ function sonify(radius){
   }
   //sd.play(tone, samplerate = sampleRate)
   
+function circle(r){
+  //the parameter of this function is r which is radius
+  sonify( t => {
+    return Array.from({length: t.length}, () => r);
+  });
+}
 
+function ellipse(a,b){
+  //parameter 1: a is the length of semi-major axis along the x-axis
+  //parameter 2: b is the length of semi-major axis along the y-axis
+sonify(t => { 
+// t is assumed to be an array of numbers 
+  return t.map(val => {
+    const cosTerm = a * Math.cos(val); 
+    const sinTerm = b * Math.sin(val); 
+    return (a * b) / Math.sqrt(cosTerm * cosTerm + sinTerm * sinTerm); 
+  }); 
+});
+}
+  
