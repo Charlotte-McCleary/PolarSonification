@@ -39,4 +39,11 @@ sonify(t => {
   }); 
 });
 }
-  
+
+function spiral(scale){
+  sonify(t=> scale * t);
+}
+
+function flower(k){
+  sonify(t => Math.sin(k *t);
+}
