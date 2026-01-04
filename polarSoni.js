@@ -1,49 +1,42 @@
-import nj from 'numjs';
-//import sounddevice. i'm not sure what package javascript has which is similar to sounddevice
+let audioContext = null;
 
-function sonify(radius){
-  //Sonify the curve given in polar form by 'r = radius(theta)'. 
-  //:param radius: the radius function. 'radius' should take and return numpy arrays
-
-  const duration = 4.0;
-  const sampleRate = 44100;
-  const sampleCount = Math.floor(sampleRate * duration);
-  const theta = linspace(0, 2 * Math.PI, sampleCount);
-  const r = radiusFn(theta);
-  const dtheta = theta[1] - theta[0];
-  const phase = cumsum(r).map(v => 400 * 2 * Math.PI * v * dtheta);
-  //const tone
-  for (let i = 0; i < sampleCount; i++){
-    if (radiusFn([theta[i]])[0] < 0){
-      tone[i] += (Math.random() * 0.02 - 0.01);
-    }
+function getAudioContext() {
+  if (!audioContext) {
+    audioContext = new AudioContext();
   }
-  //sd.play(tone, samplerate = sampleRate)
+  return audioContext;
+}
+
+const DURATION = 4.0;
+const SAMPLE_COUNT = 1000;
+const BASE_FREQUENCY = 440;
+const DTHETA = (2 * Math.PI) / SAMPLE_COUNT;
+
+/**
+ * Sonify the curve given in polar form by r = radius(theta).
+ * 
+ * @param {Function} radius - A function that takes a single number theta and returns a number r.
+ *     The `radius` function should be defined for all values of `theta` between 0 and 2*pi.
+ */
+function sonify(radius) {
+  const ctx = getAudioContext();
+  const oscillator = ctx.createOscillator();
+  oscillator.connect(ctx.destination);
   
-function circle(r){
-  //the parameter of this function is r which is radius
-  sonify( t => {
-    return Array.from({length: t.length}, () => r);
-  });
-}
+  const startTime = ctx.currentTime;
+  const frequency0 = BASE_FREQUENCY * radius(0);
+  oscillator.frequency.setValueAtTime(frequency0, startTime);
+  
+  for (let i = 1; i < SAMPLE_COUNT; i++) {
+    const theta = i * DTHETA;
+    const frequency = BASE_FREQUENCY * radius(theta);
 
-function ellipse(a,b){
-  //parameter 1: a is the length of semi-major axis along the x-axis
-  //parameter 2: b is the length of semi-major axis along the y-axis
-sonify(t => { 
-// t is assumed to be an array of numbers 
-  return t.map(val => {
-    const cosTerm = a * Math.cos(val); 
-    const sinTerm = b * Math.sin(val); 
-    return (a * b) / Math.sqrt(cosTerm * cosTerm + sinTerm * sinTerm); 
-  }); 
-});
-}
-
-function spiral(scale){
-  sonify(t=> scale * t);
-}
-
-function flower(k){
-  sonify(t => Math.sin(k *t);
+    // `sampleTime` is the length of the linear ramp
+    const sampleTime = startTime + (i / SAMPLE_COUNT) * DURATION;
+    
+    oscillator.frequency.linearRampToValueAtTime(frequency, sampleTime);
+  }
+  
+  oscillator.start(startTime);
+  oscillator.stop(startTime + DURATION);
 }
