@@ -9,7 +9,7 @@
     />
   </head>
   <body>
-  <button id="play-btn">Play</button>
+  <button id="play-btn-1">Play</button>
     <script type="text/javascript">
         function playTone(frequency) {
           const ctx = new AudioContext();
@@ -19,7 +19,27 @@
           osc.start();
           osc.stop(ctx.currentTime + 1);
         }
-        document.getElementById('play-btn').addEventListener('click', () => playTone(440));
+        document.getElementById('play-btn-1').addEventListener('click', () => playTone(440));
     </script>
+  <button id = "play-btn-2">Play Circle Sonification</button>
+  <button id = "play-btn-3"> Play Ellipse Sonification</button>
+  <button id = "play-btn-4"> Play Spiral Sonification</button>
+
+  <script scr = "polarSoni.js"></script>
+
+  <script type = "text/javascript">
+    function playCircle(){
+      sonify(theta >= 1)
+    };
+
+    document
+      .getElementById("play-btn-2")
+      .addEventListener(playCircle);
+
+
+
+
+
+  </script>
   </body>
 </html>
