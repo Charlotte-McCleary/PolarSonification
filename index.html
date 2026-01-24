@@ -36,8 +36,23 @@
       .getElementById("play-btn-2")
       .addEventListener('click', playCircle);
 
+    function playEllipse(){
+      sonify(theta => 1 + 0.4 * Math.cos(theta))
 
+    };
 
+    document
+    .getElementById("play-btn-3")
+    .addEventListener("click", () => 
+    sonify(theta => 1 + 0.4 * Math.cos(theta)));
+
+    function playSpiral(){
+      sonify(theta => 0.2 + theta/ (2 * Math.PI))
+    };
+
+    document
+    .getElementById("play-btn-4")
+    .addEventListener("click", playSpiral)
 
 
   </script>
