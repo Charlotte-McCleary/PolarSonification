@@ -25,16 +25,16 @@
   <button id = "play-btn-3"> Play Ellipse Sonification</button>
   <button id = "play-btn-4"> Play Spiral Sonification</button>
 
-  <script scr = "polarSoni.js"></script>
+  <script src = "polarSoni.js"></script>
 
   <script type = "text/javascript">
     function playCircle(){
-      sonify(theta >= 1)
+      sonify(theta => 1)
     };
 
     document
       .getElementById("play-btn-2")
-      .addEventListener(playCircle);
+      .addEventListener('click', playCircle);
 
 
 
